@@ -3,7 +3,6 @@
 namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Response;
 
 class PostControllerTest extends WebTestCase
 {
@@ -23,8 +22,7 @@ class PostControllerTest extends WebTestCase
         $input  = $data['input'];
         $output = $data['output'];
 
-        $client = static::createClient();
-
+        $client  = static::createClient();
         $crawler = $client->request('POST', '/submit/form', $input);
 
         if ($output['isHtml']) {
@@ -33,7 +31,7 @@ class PostControllerTest extends WebTestCase
 
             $this->assertEquals(1, $count);
         } else {
-            $this->assertEquals('Saved successfully', $output['result']);
+            $this->assertEquals($output['result'], $client->getResponse()->getContent());
         }
     }
 
