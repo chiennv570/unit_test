@@ -15,6 +15,7 @@ use Doctrine\DBAL\DBALException;
 
 class PostController extends Controller
 {
+
     public function submitForm(Request $request)
     {
         $product = new Product();
@@ -32,8 +33,9 @@ class PostController extends Controller
             // but, the original `$task` variable has also been updated
             $product = $form->getData();
 
-            $this->em->persist($product);
-            $this->em->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($product);
+            $em->flush();
 
             return $this->redirectToRoute('submit');
         }
@@ -96,5 +98,21 @@ class PostController extends Controller
             'name_validate'        => $nameValidate,
             'description_validate' => $descriptionValidate
         ));
+    }
+
+    /**
+     * @Route("/click", name="click")
+     */
+    public function click()
+    {
+        return $this->render('post/click.html.twig');
+    }
+
+    /**
+     * @Route("/result", name="result")
+     */
+    public function result()
+    {
+        return new Response('Redirect to here');
     }
 }

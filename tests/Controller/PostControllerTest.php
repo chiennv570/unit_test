@@ -35,6 +35,16 @@ class PostControllerTest extends WebTestCase
         }
     }
 
+    public function testClickPost()
+    {
+        $client  = static::createClient();
+        $crawler = $client->request('GET', '/click');
+        $link    = $crawler->selectLink('Click here')->link();
+        $client->click($link);
+
+        $this->assertEquals('Redirect to here', $client->getResponse()->getContent());
+    }
+
     public function submitDataProvider()
     {
         return [
