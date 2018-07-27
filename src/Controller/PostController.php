@@ -88,7 +88,7 @@ class PostController extends Controller
                     return new Response("Saved successfully");
                 }
 
-                return $this->redirectToRoute('submit');
+                return $this->redirectToRoute('submit_form');
             }
         }
 
