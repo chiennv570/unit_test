@@ -19,12 +19,21 @@ class CalculatorTest extends KernelTestCase
     {
         $calculator = $this->createMock(Calculator::class);
         //var_dump($calculator); die;
-        $calculator = $this->getMockBuilder(Calculator::class)->getMock();
+        //$calculator = $this->getMockBuilder(Calculator::class)->getMock();
         //var_dump($calculator); die;
+//        $calculator->expects($this->any())
+//                   ->method('add')
+//                   ->willReturn(3);
+
+        $mockedAddition = [
+            [2, 2, 10],
+            [2, 3, 11]
+        ];
+
         $calculator->expects($this->any())
                    ->method('add')
-                   ->willReturn(3);
+                   ->will($this->returnValueMap($mockedAddition));
 
-        $this->assertEquals(3, $calculator->add(4, 5));
+        $this->assertEquals(null, $calculator->add(4, 5));
     }
 }
