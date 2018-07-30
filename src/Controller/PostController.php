@@ -115,4 +115,52 @@ class PostController extends Controller
     {
         return new Response('Redirect to here');
     }
+
+    /**
+     * @Route("/request/form", name="request_form")
+     */
+    public function requestForm()
+    {
+        $url           = 'http://fooddocs.local/worker/42';
+        $filePath      = 'file/test.pdf';
+        $content       = file_get_contents($filePath);
+        $contentToSend = base64_encode($content);
+
+
+        $params = array(
+            'name'                    => 'Karin Repp',
+            'position'                => 'Testija',
+            'email'                   => 'margus.pala+fooddocs@gmail.com',
+            'idcode'                  => '49301011234',
+            'healthCertFile'          => 'MTIzCg==',
+            'healthCertFileName'      => 'chien12333.pdf',
+            'healthCertDate'          => '2018-05-20',
+            'hygieneTrainingFile'     => $contentToSend,
+            'hygieneTrainingFileName' => 'eqwr.pdf',
+            'hygieneTrainingDate'     => '2018-05-20',
+        );
+
+        $params = json_encode($params);
+        $ch     = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        //curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 600);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 600);
+
+// This should be the default Content-type for POST requests
+//curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: application/x-www-form-urlencoded"));
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch) !== 0) {
+            error_log('cURL error when connecting to ' . $url . ': ' . curl_error($ch));
+        }
+
+        curl_close($ch);
+        print_r($result);
+        die;
+        //return $this->render('post/request_form.html.twig');
+    }
 }
